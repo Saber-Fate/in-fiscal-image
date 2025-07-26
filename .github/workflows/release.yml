@@ -1,0 +1,21 @@
+name: Release Docker Image
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to aliyun Docker registry
+        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login docker.1ms.run -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+
+      - name: Build image
+        run: docker build -t docker.1ms.run/yourname/infisical:latest .
+
+      - name: Push image
+        run: docker push docker.1ms.run/yourname/infisical:latest
