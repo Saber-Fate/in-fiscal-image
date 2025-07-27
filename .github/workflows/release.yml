@@ -13,13 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Log in to Aliyun ACR
+      - name: Login to Aliyun ACR
         run: |
-          echo "${{ secrets.REGISTRY_PASSWORD }}" \
-          | docker login ${{ secrets.REGISTRY_URL }} \
-          -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
-          - name: Build Docker image
-          run: docker build -t ${{ secrets.REGISTRY_URL }}/infisical:latest .
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | \
+          docker login ${{ secrets.REGISTRY_URL }} \
+            --username "${{ secrets.REGISTRY_USERNAME }}" \
+            --password-stdin
 
       - name: Push Docker image
         run: docker push ${{ secrets.REGISTRY_URL }}/infisical:latest
