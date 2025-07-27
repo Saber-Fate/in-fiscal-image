@@ -3,7 +3,7 @@ name: Build and Push to Aliyun
 on:
   push:
     branches:
-      - main  # 或者你使用的其他分支名
+      - main
 
 jobs:
   build:
@@ -13,12 +13,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Login to Aliyun ACR
+      - name: Log in to ACR
         run: |
-          echo "${{ secrets.REGISTRY_PASSWORD }}" | \
-          docker login ${{ secrets.REGISTRY_URL }} \
-            --username "${{ secrets.REGISTRY_USERNAME }}" \
-            --password-stdin
+          echo "${{ secrets.REGISTRY_PASSWORD }}" \
+            | docker login ${{ secrets.ALIYUN_REGISTRY }} \
+              -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.ALIYUN_REGISTRY }}/infisical:latest .
 
       - name: Push Docker image
-        run: docker push ${{ secrets.REGISTRY_URL }}/infisical:latest
+        run: |
+          docker push ${{ secrets.ALIYUN_REGISTRY }}/infisical:latest
