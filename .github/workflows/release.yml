@@ -15,16 +15,12 @@ jobs:
 
       - name: 登录阿里云 ACR
         run: |
-          echo "${{ secrets.REGISTRY_PASSWORD }}" \
-            | docker login ${{ secrets.ALIYUN_REGISTRY }} \
-              -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ secrets.ALIYUN_REGISTRY }} -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
 
       - name: 构建镜像
         run: |
-          docker build \
-            -t ${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAMESPACE }}/infisical:latest .
+          docker build -t ${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAMESPACE }}/infisical:latest .
 
       - name: 推送镜像
         run: |
           docker push ${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAMESPACE }}/infisical:latest
-#
