@@ -1,21 +1,23 @@
-name: Release Docker Image
+name: Build and Push to Aliyun
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main  # 或者你使用的其他分支名
 
 jobs:
-  docker:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Login to aliyun Docker registry
-        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login docker.1ms.run -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+      - name: Log in to Aliyun Container Registry
+        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ secrets.REGISTRY_URL }} -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
 
-      - name: Build image
-        run: docker build -t docker.1ms.run/yourname/infisical:latest .
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.REGISTRY_URL }}/infisical:latest .
 
-      - name: Push image
-        run: docker push docker.1ms.run/yourname/infisical:latest
+      - name: Push Docker image
+        run: docker push ${{ secrets.REGISTRY_URL }}/infisical:latest
