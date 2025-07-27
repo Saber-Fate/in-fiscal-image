@@ -27,3 +27,4 @@ jobs:
       - name: 推送镜像
         run: |
           docker push ${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAMESPACE }}/infisical:latest
+#
